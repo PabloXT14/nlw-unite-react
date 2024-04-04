@@ -15,6 +15,7 @@ export function IconButton({
       {...props}
       className={twMerge(
         'rounded-md border border-white/10 bg-white/10 p-1.5',
+        'disabled:cursor-not-allowed disabled:opacity-50',
         transparent && 'bg-transparent',
         className,
       )}
