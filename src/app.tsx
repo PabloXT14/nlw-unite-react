@@ -3,7 +3,7 @@ import { Header } from './components/header'
 
 export function App() {
   return (
-    <div className="mx-auto max-w-7xl px-8 py-5">
+    <div className="mx-auto flex max-w-7xl flex-col gap-5 px-8 py-5">
       <Header />
       <AttendeeList />
     </div>
