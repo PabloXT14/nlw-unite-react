@@ -11,8 +11,18 @@ import { Table } from './table/table'
 import { TableHeader } from './table/table-header'
 import { TableCell } from './table/table-cell'
 import { TableRow } from './table/table-row'
+import { ChangeEvent, useState } from 'react'
+import { attendees } from '../data/attendees'
+import { formatDistance } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export function AttendeeList() {
+  const [search, setSearch] = useState('')
+
+  function onSearchInputChanged(event: ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value)
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
@@ -22,6 +32,7 @@ export function AttendeeList() {
           <input
             type="text"
             placeholder="Buscar participante..."
+            onChange={onSearchInputChanged}
             className="flex-1 border-0 bg-transparent p-0 text-sm focus:ring-0"
           />
         </div>
@@ -48,9 +59,9 @@ export function AttendeeList() {
           </TableRow>
         </thead>
         <tbody>
-          {Array.from({ length: 10 }).map((_, i) => (
+          {attendees.map((attendee) => (
             <TableRow
-              key={`attendee-${i}`}
+              key={`${attendee.name}-${attendee.id}`}
               className="transition-all hover:bg-white/5"
             >
               <TableCell>
@@ -59,15 +70,27 @@ export function AttendeeList() {
                   className="size-4 rounded border border-white/10 bg-black/20 text-orange-400"
                 />
               </TableCell>
-              <TableCell>00{i}</TableCell>
+              <TableCell>{attendee.id}</TableCell>
               <TableCell>
                 <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-white">John Doe</span>
-                  <span>johndoe@email.com</span>
+                  <span className="font-semibold text-white">
+                    {attendee.name}
+                  </span>
+                  <span>{attendee.email}</span>
                 </div>
               </TableCell>
-              <TableCell>7 dias atrás</TableCell>
-              <TableCell>3 dias atrás</TableCell>
+              <TableCell>
+                {formatDistance(attendee.createdAt, new Date(), {
+                  addSuffix: true,
+                  locale: ptBR,
+                })}
+              </TableCell>
+              <TableCell>
+                {formatDistance(attendee.checkedInAt, new Date(), {
+                  addSuffix: true,
+                  locale: ptBR,
+                })}
+              </TableCell>
               <TableCell>
                 <IconButton transparent>
                   <MoreHorizontal className="size-4" />
